@@ -3,12 +3,9 @@ package com.example.ugd_3_kelompok
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
@@ -54,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
             else if(username != "admin" || password != "admin"){
                 checkLogin = false
-                Snackbar.make(mainLayout, "Username or Password Wrong", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(mainLayout, "Username atau Password salah!", Snackbar.LENGTH_LONG).show()
             }
             if(!checkLogin) return@OnClickListener
 
@@ -62,20 +59,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(moveHome)
         })
 
-
-
         btnClear.setOnClickListener{
             val username: String = inputUsername.getEditText()?.getText().toString()
             val password: String = inputPassword.getEditText()?.getText().toString()
 
             if(username.isEmpty() && password.isEmpty()){
-                Snackbar.make(mainLayout, "Field Still Empty", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(mainLayout, "Username/Password Belum di Isi", Snackbar.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             inputUsername.editText?.setText("")
             inputPassword.editText?.setText("")
 
-            Snackbar.make(mainLayout, "Success Clear Field", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(mainLayout, "Berhasil Clear Field", Snackbar.LENGTH_LONG).show()
         }
 
     }
