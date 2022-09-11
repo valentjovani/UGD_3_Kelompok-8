@@ -90,17 +90,31 @@
             android:text="Login"
             android:textColor="@color/white" />
     </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegister"
-        android:layout_width="158dp"
-        android:layout_height="73dp"
+        android:layout_width="204dp"
+        android:layout_height="68dp"
         android:layout_weight="1"
         android:backgroundTint="@color/purple_500"
         android:text="Belum Punya Akun? Register"
         android:textColor="@color/white"
         app:iconTint="#F8F5F5"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.546"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="594dp" />
+        tools:layout_editor_absoluteY="561dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnClear"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="124dp"
+        android:layout_weight="1"
+        android:text="Clear Field"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
