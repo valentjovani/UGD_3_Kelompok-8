@@ -18,7 +18,7 @@
         android:padding="20dp">
 
         <TextView
-            android:id="@+id/tvPersonalTrainer"
+            android:id="@+id/tvFasilitas"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             tools:text="Personal Trainer"
@@ -39,7 +39,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPersonalTrainer" />
+            app:layout_constraintTop_toBottomOf="@id/tvFasilitas" />
 
         <TextView
             android:id="@+id/tvTanggal"

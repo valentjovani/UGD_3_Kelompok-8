@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class MemberHotel (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val personalTrainer: String,
+    val fasilitas: String,
     val membership: String,
     val tanggal: String,
     val durasi: String

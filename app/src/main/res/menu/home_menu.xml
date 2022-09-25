@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_data1"
-        android:title="Data 1"/>
-    <item android:id="@+id/menu_data2"
-        android:title="Data 2"/>
-    <item android:id="@+id/menu_exit"
-        android:title="Exit App"/>
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/navigation_data"
+        android:icon="@drawable/ic_baseline_view_agenda_24"
+        android:title="Data Pelanggan"/>
+
+    <item
+        android:id="@+id/navigation_memberHotel"
+        android:icon="@drawable/ic_baseline_work_24"
+        android:title="Member Hotel"/>
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="Profile"/>
 </menu>

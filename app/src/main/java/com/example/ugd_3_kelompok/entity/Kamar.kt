@@ -6,16 +6,22 @@ class Kamar(
 
     companion object{
         @JvmField
-        var userWorkout = arrayOf(
-            Kamar("Jumping Jacks"),
-            Kamar("Russian Twist"),
-            Kamar("Push Up"),
-            Kamar("Heel Touch"),
-            Kamar("Sit Up"),
-            Kamar("Chin Up"),
-            Kamar("Squats"),
-            Kamar("Climbers"),
-            Kamar("Leg Raises"),
+        var userKamar = arrayOf(
+            Kamar("Standard Room"),
+            Kamar("Superior Room"),
+            Kamar("Deluxe Room"),
+            Kamar("Junior Suite Room"),
+            Kamar("Suite Room"),
+            Kamar("Presidential Suite"),
+            Kamar("Single Room"),
+            Kamar("Twin Room"),
+            Kamar("Double Room"),
+            Kamar("Family Room"),
+            Kamar("Connecting Room"),
+            Kamar("Murphy Room"),
+            Kamar("Accessible/Disabled Room"),
+            Kamar("Smoking/Non Smoking Room"),
+            Kamar("Cabana Room"),
         )
     }
 }

@@ -7,8 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ugd1.entity.Pelanggan
-import com.example.ugd1.entity.Workout
+import com.example.ugd_3_kelompok.entity.Kamar
 
 class HomeFragment: Fragment() {
 
@@ -23,18 +22,14 @@ class HomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val layoutManager = LinearLayoutManager(context)
-        val adapter: RVWorkout = RVWorkout(Workout.userWorkout)
+        val adapter: RVKamar = RVKamar(Kamar.userKamar)
 
-        //Menghubungkan rvMahasiswa dengan recycler view yang ada pada layout
-        val rvData : RecyclerView = view.findViewById(R.id.rv_workout)
+        val rvData : RecyclerView = view.findViewById(R.id.rv_kamar)
 
-        //Set layout manager dari recycler view
         rvData.layoutManager = layoutManager
 
-        //tidak mengubah size recycler view jika terdapat item ditambahkan atau dikurangkan
         rvData.setHasFixedSize(true)
 
-        //Set Adapter dari recycler view.
         rvData.adapter = adapter
     }
 }

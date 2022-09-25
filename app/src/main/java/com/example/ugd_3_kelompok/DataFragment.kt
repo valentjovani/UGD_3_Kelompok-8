@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ugd1.entity.Pelanggan
+import com.example.ugd_3_kelompok.entity.Pelanggan
 
 class DataFragment : Fragment(){
 

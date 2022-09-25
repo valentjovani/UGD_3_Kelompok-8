@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.ugd1.databinding.ActivityEditProfileBinding
-import com.example.ugd1.room.User
-import com.example.ugd1.room.UserDB
+import com.example.ugd_3_kelompok.databinding.ActivityEditProfileBinding
+import com.example.ugd_3_kelompok.room.User
+import com.example.ugd_3_kelompok.room.UserDB
 
 class EditProfileFragment : Fragment() {
     private var _binding: ActivityEditProfileBinding? = null
@@ -18,7 +18,6 @@ class EditProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = ActivityEditProfileBinding.inflate(inflater, container, false)
         val view = binding.root
         return view

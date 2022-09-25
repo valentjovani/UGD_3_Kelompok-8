@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".MemberGymActivity">
+    tools:context=".MemberHotelActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_gym"
+        android:id="@+id/list_hotel"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
@@ -21,7 +21,7 @@
         android:id="@+id/btnAdd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TAMBAH MEMBERSHIP"
+        android:text="TAMBAH MEMBERSHIP HOTEL"
         android:textSize="12dp"
         android:layout_marginBottom="100dp"
         app:layout_constraintStart_toStartOf="parent"

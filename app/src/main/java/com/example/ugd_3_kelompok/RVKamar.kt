@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ugd_3_kelompok.entity.Kamar
 
-class RVWorkout(private val data: Array<Kamar>) : RecyclerView.Adapter<RVWorkout.viewHolder>() {
+class RVKamar(private val data: Array<Kamar>) : RecyclerView.Adapter<RVKamar.viewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
@@ -18,7 +18,7 @@ class RVWorkout(private val data: Array<Kamar>) : RecyclerView.Adapter<RVWorkout
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
         val currentItem = data[position]
-        holder.tvWorkout.text = currentItem.jenis
+        holder.tvKamar.text = currentItem.jenis
 
     }
 
@@ -27,6 +27,6 @@ class RVWorkout(private val data: Array<Kamar>) : RecyclerView.Adapter<RVWorkout
     }
 
     class viewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val tvWorkout : TextView = itemView.findViewById(R.id.jenisKamar)
+        val tvKamar : TextView = itemView.findViewById(R.id.jenisKamar)
     }
 }

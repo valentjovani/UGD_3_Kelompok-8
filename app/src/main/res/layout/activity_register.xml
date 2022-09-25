@@ -12,7 +12,7 @@
         android:layout_height="100dp"
         android:id="@+id/ivRegister"
         android:layout_marginTop="0dp"
-        android:src="@drawable/undraw_teacher_35j2"
+        android:src="@drawable/kamar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

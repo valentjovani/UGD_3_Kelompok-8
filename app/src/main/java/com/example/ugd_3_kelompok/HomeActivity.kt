@@ -22,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
         var bottomNavigationView: BottomNavigationView = findViewById(R.id.nav_view)
         val home = HomeFragment()
         val data = DataFragment()
-        val memberGym = MemberGymFragment()
+        val memberHotel = MemberHotelFragment()
         val profile = ProfilFragment()
 
         setThatFragments(home)
@@ -35,8 +35,8 @@ class HomeActivity : AppCompatActivity() {
                 R.id.navigation_data -> {
                     setThatFragments(data)
                 }
-                R.id.navigation_memberGym -> {
-                    setThatFragments(memberGym)
+                R.id.navigation_memberHotel -> {
+                    setThatFragments(memberHotel)
                 }
                 R.id.navigation_profile -> {
                     setThatFragments(profile)

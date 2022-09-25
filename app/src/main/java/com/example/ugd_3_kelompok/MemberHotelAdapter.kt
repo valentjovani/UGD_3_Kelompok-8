@@ -6,29 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ugd_3_kelompok.room.MemberHotel
-import kotlinx.android.synthetic.main.activity_member_gym_adapter.view.*
+import kotlinx.android.synthetic.main.activity_member_hotel_adapter.view.*
 
-class MemberHotelAdapter (private val memberGyms : ArrayList<MemberHotel>, private val
+class MemberHotelAdapter (private val memberHotels : ArrayList<MemberHotel>, private val
 listener: OnAdapterListener
 ) :
     RecyclerView.Adapter<MemberHotelAdapter.MemberHotelViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            MemberGymViewHolder {
-        return MemberGymViewHolder(
+            MemberHotelViewHolder {
+        return MemberHotelViewHolder(
 
             LayoutInflater.from(parent.context).inflate(R.layout.activity_member_hotel_adapter, parent, false)
         )
     }
 
     override fun onBindViewHolder(
-        holder: MemberGymViewHolder, position:
+        holder: MemberHotelViewHolder, position:
         Int ) {
-        val memberGym = memberGyms[position]
-        holder.view.tvPersonalTrainer.text = memberGym.personalTrainer
-        holder.view.tvMembership.text = memberGym.membership
-        holder.view.tvTanggal.text = memberGym.tanggal
-        holder.view.tvDurasi.text = memberGym.durasi
-        holder.view.tvPersonalTrainer.setOnClickListener {
+        val memberHotel = memberHotels[position]
+        holder.view.tvFasilitas.text = memberHotel.fasilitas
+        holder.view.tvMembership.text = memberHotel.membership
+        holder.view.tvTanggal.text = memberHotel.tanggal
+        holder.view.tvDurasi.text = memberHotel.durasi
+        holder.view.tvFasilitas.setOnClickListener {
             listener.onClick(memberHotel)
         }
         holder.view.icon_edit.setOnClickListener {
@@ -40,13 +40,13 @@ listener: OnAdapterListener
     }
 
     override fun getItemCount() = memberHotels.size
-    inner class MemberGymViewHolder(val view: View) :
+    inner class MemberHotelViewHolder(val view: View) :
         RecyclerView.ViewHolder(view)
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(list: List<MemberHotel>) {
-        memberGyms.clear()
-        memberGyms.addAll(list)
+        memberHotels.clear()
+        memberHotels.addAll(list)
         notifyDataSetChanged()
     }
 

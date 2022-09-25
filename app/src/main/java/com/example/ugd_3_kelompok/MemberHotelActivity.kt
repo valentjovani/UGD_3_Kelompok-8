@@ -8,54 +8,54 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.ugd1.room.Constant
-import com.example.ugd1.room.MemberGym
-import com.example.ugd1.room.MemberGymDB
-import kotlinx.android.synthetic.main.activity_member_gym.*
+import com.example.ugd_3_kelompok.room.Constant
+import com.example.ugd_3_kelompok.room.MemberHotel
+import com.example.ugd_3_kelompok.room.MemberHotelDB
+import kotlinx.android.synthetic.main.activity_member_hotel.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MemberGymActivity : AppCompatActivity() {
-    val db by lazy{ MemberGymDB(this) }
-    lateinit var memberGymAdapter: MemberGymAdapter
+class MemberHotelActivity : AppCompatActivity() {
+    val db by lazy{ MemberHotelDB(this) }
+    lateinit var memberHotelAdapter: MemberHotelAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_member_gym)
+        setContentView(R.layout.activity_member_hotel)
         supportActionBar?.hide()
         setupListener()
         setupRecyclerView()
     }
 
     private fun setupRecyclerView() {
-        memberGymAdapter = MemberGymAdapter(arrayListOf(), object :
-            MemberGymAdapter.OnAdapterListener {
-            override fun onClick(memberGym : MemberGym) {
-                Toast.makeText(applicationContext, memberGym.personalTrainer,
+        memberHotelAdapter = MemberHotelAdapter(arrayListOf(), object :
+            MemberHotelAdapter.OnAdapterListener {
+            override fun onClick(memberHotel : MemberHotel) {
+                Toast.makeText(applicationContext, memberHotel.fasilitas,
                     Toast.LENGTH_SHORT).show()
-                intentEdit(memberGym.id, Constant.TYPE_READ)
+                intentEdit(memberHotel.id, Constant.TYPE_READ)
             }
-            override fun onUpdate(memberGym: MemberGym) {
-                intentEdit(memberGym.id, Constant.TYPE_UPDATE)
+            override fun onUpdate(memberHotel: MemberHotel) {
+                intentEdit(memberHotel.id, Constant.TYPE_UPDATE)
             }
-            override fun onDelete(memberGym : MemberGym) {
-                deleteDialog(memberGym)
+            override fun onDelete(memberHotel : MemberHotel) {
+                deleteDialog(memberHotel)
             }
         })
-        list_gym.apply {
+        list_hotel.apply {
             layoutManager = LinearLayoutManager(applicationContext)
-            adapter = memberGymAdapter
+            adapter = memberHotelAdapter
         }
     }
 
-    private fun deleteDialog(memberGym: MemberGym){
+    private fun deleteDialog(memberHotel: MemberHotel){
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.apply {
             setTitle("Confirmation")
-            setMessage("Are You Sure to delete this data From ${memberGym.personalTrainer}?")
+            setMessage("Are You Sure to delete this data From ${memberHotel.fasilitas}?")
             setNegativeButton("Cancel", DialogInterface.OnClickListener
             { dialogInterface, i ->
                 dialogInterface.dismiss()
@@ -64,7 +64,7 @@ class MemberGymActivity : AppCompatActivity() {
             { dialogInterface, i ->
                 dialogInterface.dismiss()
                 CoroutineScope(Dispatchers.IO).launch {
-                    db.MemberGymDao().deleteMemberGym(memberGym)
+                    db.MemberHotelDao().deleteMemberHotel(memberHotel)
                     loadData()
                 }
             })
@@ -78,10 +78,10 @@ class MemberGymActivity : AppCompatActivity() {
 
     fun loadData() {
         CoroutineScope(Dispatchers.IO).launch {
-            val membergym = db.MemberGymDao().getMemberGym()
-            Log.d("MemberGymActivity","dbResponse: $membergym")
+            val memberHotel = db.MemberHotelDao().getMemberHotel()
+            Log.d("MemberHotelActivity","dbResponse: $memberHotel")
             withContext(Dispatchers.Main){
-                memberGymAdapter.setData( membergym )
+                memberHotelAdapter.setData( memberHotel )
             }
         }
     }
@@ -90,10 +90,10 @@ class MemberGymActivity : AppCompatActivity() {
             intentEdit(0,Constant.TYPE_CREATE)
         }
     }
-    fun intentEdit(memberGymId : Int, intentType: Int){
+    fun intentEdit(memberHotelId : Int, intentType: Int){
         startActivity(
-            Intent(applicationContext, EditMemberGym::class.java)
-                .putExtra("intent_id", memberGymId)
+            Intent(applicationContext, EditMemberHotel::class.java)
+                .putExtra("intent_id", memberHotelId)
                 .putExtra("intent_type", intentType)
         )
     }
