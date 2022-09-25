@@ -1,90 +1,149 @@
 package com.example.ugd_3_kelompok
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import android.content.Intent
+import com.example.ugd_3_kelompok.databinding.ActivityRegisterBinding
+import com.example.ugd_3_kelompok.room.User
+import com.example.ugd_3_kelompok.room.UserDB
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RegisterActivity: AppCompatActivity() {
-    private lateinit var inputEmail: TextInputLayout
-    private lateinit var inputUsername: TextInputLayout
-    private lateinit var inputPassword: TextInputLayout
-    private lateinit var inputKofimasiPassword: TextInputLayout
-    private lateinit var mainLayout: ConstraintLayout
+    private lateinit var tilUsername: TextInputLayout
+    private lateinit var tilPassword: TextInputLayout
+    private lateinit var tilEmail: TextInputLayout
+    private lateinit var tilTanggalLahir: TextInputLayout
+    private lateinit var tilNomorTelepon: TextInputLayout
+    private lateinit var btnRegister: Button
+    private lateinit var btnClear: Button
+    private lateinit var registerLayout: ConstraintLayout
+    private lateinit var btnDatePicker: Button
+
+    private lateinit var binding: ActivityRegisterBinding
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        val view = binding.root
 
-        setTitle("Register")
+        setContentView(view)
 
-        inputEmail = findViewById(R.id.inputLayoutEmail)
-        inputUsername = findViewById(R.id.inputLayoutUsername)
-        inputPassword = findViewById(R.id.inputLayoutPassword)
-        inputKofimasiPassword = findViewById(R.id.inputLayoutKonfirmasiPassword)
-        mainLayout = findViewById(R.id.mainLayout)
-        val btnClear: Button = findViewById(R.id.btnClear)
+        val db by lazy{ UserDB( this) }
+        val userDao = db.userDao()
+
+        tilUsername = findViewById(R.id.etUsername)
+        tilPassword = findViewById(R.id.etPassword)
+        tilEmail = findViewById(R.id.etEmail)
+        tilTanggalLahir = findViewById(R.id.etTanggalLahir)
+        tilNomorTelepon = findViewById(R.id.etNomorTelepon)
         val btnRegister: Button = findViewById(R.id.btnRegister)
-        val btnLogin: Button = findViewById(R.id.btnLogin)
+        val btnClear: Button = findViewById(R.id.btnClear)
+        var checkLogin = true
 
-        btnClear.setOnClickListener {
-            inputEmail.getEditText()?.setText("")
-            inputUsername.getEditText()?.setText("")
-            inputPassword.getEditText()?.setText("")
-            inputKofimasiPassword.getEditText()?.setText("")
+        binding.btnRegister.setOnClickListener(View.OnClickListener {
+            val mBundle = Bundle()
+            val intent = Intent(this, MainActivity::class.java)
 
-            Snackbar.make(mainLayout, "Text Cleared Success", Snackbar.LENGTH_LONG).show()
-        }
-
-        btnLogin.setOnClickListener {
-            val moveLogin = Intent(this@RegisterActivity, MainActivity::class.java)
-            startActivity(moveLogin)
-        }
-
-        btnRegister.setOnClickListener(View.OnClickListener {
-            var checkRegister = false
-            val email: String = inputEmail.getEditText()?.getText().toString()
-            val username: String = inputUsername.getEditText()?.getText().toString()
-            val password: String = inputPassword.getEditText()?.getText().toString()
-            val konfimasiPassword: String = inputKofimasiPassword.getEditText()?.getText().toString()
-
-            if(email.isEmpty()){
-                inputEmail.setError("Email must be filled with text")
-                checkRegister = false
-            }
+            val username: String = binding.etUsername.getEditText()?.getText().toString()
+            val password: String = binding.etPassword.getEditText()?.getText().toString()
+            val email: String = binding.etEmail.getEditText()?.getText().toString()
+            val tanggalLahir: String = binding.etTanggalLahir.getEditText()?.getText().toString()
+            val nomorTelepon: String = binding.etNomorTelepon.getEditText()?.getText().toString()
 
             if(username.isEmpty()){
-                inputUsername.setError("Username must be filled with text")
-                checkRegister = false
+                binding.etUsername.setError("Username masih Kosong")
+                checkLogin = false
             }
 
             if(password.isEmpty()){
-                inputPassword.setError("Password must be filled with text")
-                checkRegister = false
+                binding.etPassword.setError("Password masih Kosong")
+                checkLogin = false
             }
 
-            if(konfimasiPassword.isEmpty()){
-                inputKofimasiPassword.setError("password confirmation must be filled with text")
-                checkRegister = false
+            if(email.isEmpty()) {
+                binding.etEmail.setError("Email masih Kosong")
+                checkLogin = false
             }
 
-            if(password != konfimasiPassword){
-                inputKofimasiPassword.setError("Wrong password")
-                checkRegister = false
+            if(tanggalLahir.isEmpty()){
+                binding.etTanggalLahir.setError("Tanggal Lahir masih Kosong")
+                checkLogin = false
             }
 
-            if (email.isEmpty() && !username.isEmpty() && !password.isEmpty() && konfimasiPassword.isEmpty() && password == konfimasiPassword) {
-                Snackbar.make(mainLayout, "Success Register", Snackbar.LENGTH_LONG).show()
-                checkRegister = true
+            if(nomorTelepon.isEmpty()){
+                binding.etNomorTelepon.setError("Nomor Telepon masih Kosong")
+                checkLogin = false
             }
-            if(!checkRegister) return@OnClickListener
-            val moveHome = Intent(this@RegisterActivity, RegisterActivity::class.java)
-            startActivity(moveHome)
+
+            if(!username.isEmpty() && !password.isEmpty() && !email.isEmpty() && !tanggalLahir.isEmpty() && !nomorTelepon.isEmpty()){
+                checkLogin = true
+            }
+
+            if(binding.etUsername.getEditText()?.getText()==null){
+                binding.etUsername.getEditText()?.setText("")
+            }
+
+            if(binding.etPassword.getEditText()?.getText()==null){
+                binding.etPassword.getEditText()?.setText("")
+            }
+
+            if(checkLogin == true){
+                val moveRegister = Intent(this@RegisterActivity, MainActivity::class.java)
+                mBundle.putString("username", binding.etUsername.editText?.text.toString())
+                mBundle.putString("password", binding.etPassword.editText?.text.toString())
+                mBundle.putString("email", binding.etEmail.editText?.text.toString())
+                mBundle.putString("TanggalLahir", binding.etTanggalLahir.editText?.text.toString())
+                mBundle.putString("NomorTelepon", binding.etNomorTelepon.editText?.text.toString())
+                moveRegister.putExtra("register", mBundle)
+                startActivity(moveRegister)
+            }
+            if(!checkLogin) return@OnClickListener
+
+            val user = User(0, username, password, email, tanggalLahir, nomorTelepon)
+            userDao.addUser(user)
         })
+
+        btnDatePicker = findViewById(R.id.btnDatePicker)
+        val myCalendar = Calendar.getInstance()
+        val datePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            myCalendar.set(Calendar.YEAR, year)
+            myCalendar.set(Calendar.MONTH, month)
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateLable(myCalendar)
+        }
+
+        btnDatePicker.setOnClickListener{
+            DatePickerDialog(this, datePicker, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        btnClear.setOnClickListener{
+            binding.etUsername.editText?.setText("")
+            binding.etPassword.editText?.setText("")
+            binding.etEmail.editText?.setText("")
+            binding.etTanggalLahir.editText?.setText("")
+            binding.etNomorTelepon.editText?.setText("")
+
+        }
     }
+
+    private fun updateLable(myCalendar: Calendar) {
+        val myFormat = "dd-MM-yyyy"
+        val sdf = SimpleDateFormat(myFormat, Locale.UK)
+        binding.etTanggalLahir.editText?.setText(sdf.format(myCalendar.time))
+    }
+
 }
