@@ -24,16 +24,12 @@ class DataFragment : Fragment(){
         val layoutManager = LinearLayoutManager(context)
         val adapter: RVPelanggan = RVPelanggan(Pelanggan.userData)
 
-        //Menghubungkan rvMahasiswa dengan recycler view yang ada pada layout
         val rvData : RecyclerView = view.findViewById(R.id.rv_data)
 
-        //Set layout manager dari recycler view
         rvData.layoutManager = layoutManager
 
-        //tidak mengubah size recycler view jika terdapat item ditambahkan atau dikurangkan
         rvData.setHasFixedSize(true)
 
-        //Set Adapter dari recycler view.
         rvData.adapter = adapter
     }
 }
