@@ -107,10 +107,11 @@
         app:layout_constraintTop_toBottomOf="@id/textNoTelp" />
 
     <FrameLayout
+        android:id="@+id/viewUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/viewNomorTelepon"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="5dp"
         tools:ignore="MissingConstraints">
         <Button
             android:id="@+id/btnUpdate"
@@ -127,6 +128,55 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/viewNomorTelepon"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/viewCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/viewUpdate"
+        android:layout_marginTop="5dp"
+        tools:ignore="MissingConstraints">
+        <Button
+            android:id="@+id/btnCamera"
+            android:layout_width="370dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/black"
+            android:backgroundTint="@color/white"
+            android:text="Camera"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewUpdate"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/viewCamera"
+        android:layout_marginTop="5dp"
+        tools:ignore="MissingConstraints">
+        <Button
+            android:id="@+id/btnLokasi"
+            android:layout_width="370dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/black"
+            android:backgroundTint="@color/white"
+            android:text="Lokasi"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewCamera"/>
 
     </FrameLayout>
 
