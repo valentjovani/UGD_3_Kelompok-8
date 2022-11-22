@@ -21,7 +21,7 @@
             android:id="@+id/tvFasilitas"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Personal Trainer"
+            tools:text="Member Hotel"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="@color/black"

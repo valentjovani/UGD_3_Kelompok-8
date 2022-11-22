@@ -1,5 +1,6 @@
 package com.example.ugd_3_kelompok
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -29,6 +30,13 @@ class ProfilFragment : Fragment() {
 
         binding.btnUpdate.setOnClickListener {
             transitionFragment(EditProfileFragment())
+        }
+        binding.btnLokasi.setOnClickListener {
+            transitionFragment(LocationFragment())
+        }
+        binding.btnCamera.setOnClickListener {
+            val moveCamera = Intent(this@ProfilFragment.requireContext(), CameraActivity::class.java)
+            startActivity(moveCamera)
         }
     }
 
