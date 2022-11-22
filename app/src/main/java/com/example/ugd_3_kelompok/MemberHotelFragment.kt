@@ -24,8 +24,8 @@ class MemberHotelFragment : Fragment() {
 
 
         btnAdd.setOnClickListener(View.OnClickListener {
-            val moveMemberGym = Intent(this@MemberHotelFragment.context, MemberHotelActivity::class.java)
-            startActivity(moveMemberGym)
+            val moveMemberHotel = Intent(this@MemberHotelFragment.context, MemberHotelActivity::class.java)
+            startActivity(moveMemberHotel)
         })
     }
 
