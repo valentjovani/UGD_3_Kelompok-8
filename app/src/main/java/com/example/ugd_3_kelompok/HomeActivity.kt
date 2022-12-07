@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
 
+
 class HomeActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
 
