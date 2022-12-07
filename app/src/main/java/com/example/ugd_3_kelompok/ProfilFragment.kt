@@ -6,14 +6,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.ugd_3_kelompok.databinding.FragmentProfilBinding
 import com.example.ugd_3_kelompok.room.UserDB
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 
 class ProfilFragment : Fragment() {
 
     private var _binding  : FragmentProfilBinding?= null
     private val binding get() = _binding!!
+    private var queue: RequestQueue? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +59,8 @@ class ProfilFragment : Fragment() {
         binding.viewUsername.setText(user.username)
         binding.viewEmail.setText(user.email)
         binding.viewNomorTelepon.setText(user.nomorTelepon)
+
+
     }
 
     override fun onDestroy() {
@@ -63,5 +74,7 @@ class ProfilFragment : Fragment() {
             .addToBackStack(null).commit()
         transition.hide(ProfilFragment())
     }
+
+
 
 }

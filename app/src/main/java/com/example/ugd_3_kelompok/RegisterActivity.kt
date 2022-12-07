@@ -26,6 +26,7 @@ import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.android.volley.RequestQueue
 import com.example.ugd_3_kelompok.databinding.ActivityMainBinding
 
 class RegisterActivity: AppCompatActivity() {
@@ -41,6 +42,7 @@ class RegisterActivity: AppCompatActivity() {
     private val CHANNEL_ID_1 = "channel_notification_01"
     private val CHANNEL_ID_2 = "channel_notification_02"
     private val notificationId1 = 101
+    private var queue: RequestQueue? = null
 
     private lateinit var binding: ActivityRegisterBinding
 
@@ -114,6 +116,7 @@ class RegisterActivity: AppCompatActivity() {
             }
 
             if(checkLogin == true){
+
                 val moveRegister = Intent(this@RegisterActivity, MainActivity::class.java)
                 mBundle.putString("username", binding.etUsername.editText?.text.toString())
                 mBundle.putString("password", binding.etPassword.editText?.text.toString())
