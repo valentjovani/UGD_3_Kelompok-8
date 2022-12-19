@@ -24,10 +24,20 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.android.volley.AuthFailureError
 import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.example.ugd_3_kelompok.api.UserApi
 import com.example.ugd_3_kelompok.databinding.ActivityMainBinding
+import com.example.ugd_3_kelompok.models.UserModel
+import com.google.gson.Gson
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 class RegisterActivity: AppCompatActivity() {
     private lateinit var tilUsername: TextInputLayout
@@ -54,10 +64,12 @@ class RegisterActivity: AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
 
+        queue = Volley.newRequestQueue(this)
+
         setContentView(view)
 
-        val db by lazy{ UserDB( this) }
-        val userDao = db.userDao()
+//        val db by lazy{ UserDB( this) }
+//        val userDao = db.userDao()
 
         tilUsername = findViewById(R.id.etUsername)
         tilPassword = findViewById(R.id.etPassword)
@@ -116,25 +128,26 @@ class RegisterActivity: AppCompatActivity() {
             }
 
             if(checkLogin == true){
+                createUser(mBundle)
 
-                val moveRegister = Intent(this@RegisterActivity, MainActivity::class.java)
-                mBundle.putString("username", binding.etUsername.editText?.text.toString())
-                mBundle.putString("password", binding.etPassword.editText?.text.toString())
-                mBundle.putString("email", binding.etEmail.editText?.text.toString())
-                mBundle.putString("TanggalLahir", binding.etTanggalLahir.editText?.text.toString())
-                mBundle.putString("NomorTelepon", binding.etNomorTelepon.editText?.text.toString())
+//                val moveRegister = Intent(this@RegisterActivity, MainActivity::class.java)
+//                mBundle.putString("username", binding.etUsername.editText?.text.toString())
+//                mBundle.putString("password", binding.etPassword.editText?.text.toString())
+//                mBundle.putString("email", binding.etEmail.editText?.text.toString())
+//                mBundle.putString("TanggalLahir", binding.etTanggalLahir.editText?.text.toString())
+//                mBundle.putString("NomorTelepon", binding.etNomorTelepon.editText?.text.toString())
 
-                createNotificationChannel()
+//                createNotificationChannel()
 
-                sendNotification1()
+//                sendNotification1()
 
-                moveRegister.putExtra("register", mBundle)
-                startActivity(moveRegister)
+//                moveRegister.putExtra("register", mBundle)
+//               startActivity(moveRegister)
             }
             if(!checkLogin) return@OnClickListener
 
-            val user = User(0, username, password, email, tanggalLahir, nomorTelepon)
-            userDao.addUser(user)
+//            val user = User(0, username, password, email, tanggalLahir, nomorTelepon)
+//            userDao.addUser(user)
         })
 
         btnDatePicker = findViewById(R.id.btnDatePicker)
@@ -214,6 +227,76 @@ class RegisterActivity: AppCompatActivity() {
         val myFormat = "dd-MM-yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.UK)
         binding.etTanggalLahir.editText?.setText(sdf.format(myCalendar.time))
+    }
+
+    private fun createUser(mBundle: Bundle){
+
+        val user = UserModel(0,
+            binding.etUsername.getEditText()?.getText().toString(),
+            binding.etPassword.getEditText()?.getText().toString(),
+            binding.etEmail.getEditText()?.getText().toString(),
+            binding.etTanggalLahir.getEditText()?.getText().toString(),
+            binding.etNomorTelepon.getEditText()?.getText().toString()
+        )
+        val stringRequest: StringRequest = object: StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response->
+            val gson = Gson()
+            val mahasiswa = gson.fromJson(response, UserModel::class.java)
+            val moveRegister = Intent(this@RegisterActivity, MainActivity::class.java)
+
+            if(mahasiswa!=null){
+                Toast.makeText(this@RegisterActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
+            }else {
+                Toast.makeText(this@RegisterActivity, "Data kosong", Toast.LENGTH_SHORT).show()
+            }
+
+
+            mBundle.putString("username", binding.etUsername.editText?.text.toString())
+            mBundle.putString("password", binding.etPassword.editText?.text.toString())
+            mBundle.putString("email", binding.etEmail.editText?.text.toString())
+            mBundle.putString("TanggalLahir", binding.etTanggalLahir.editText?.text.toString())
+            mBundle.putString("NomorTelepon", binding.etNomorTelepon.editText?.text.toString())
+
+            createNotificationChannel()
+
+            sendNotification1()
+
+            moveRegister.putExtra("register", mBundle)
+            startActivity(moveRegister)
+
+        }, Response.ErrorListener { error->
+
+            try{
+                val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                val errors = JSONObject(responseBody)
+                Toast.makeText(
+                    this@RegisterActivity,
+                    errors.getString("message"),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }catch (e:Exception){
+                Toast.makeText(this@RegisterActivity, e.message, Toast.LENGTH_SHORT).show()
+            }
+        }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Accept"] = "application/json"
+                return headers
+
+            }
+
+            @Throws(AuthFailureError::class)
+            override fun getBody(): ByteArray {
+                val gson = Gson()
+                val requestBody = gson.toJson(user)
+                return requestBody.toByteArray(StandardCharsets.UTF_8)
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
+        }
+        queue!!.add(stringRequest)
     }
 
 }

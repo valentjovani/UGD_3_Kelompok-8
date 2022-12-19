@@ -1,82 +1,64 @@
 package com.example.ugd_3_kelompok
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import com.example.ugd_3_kelompok.room.Constant
-import com.example.ugd_3_kelompok.room.MemberHotel
-import com.example.ugd_3_kelompok.room.MemberHotelDB
-import kotlinx.android.synthetic.main.activity_edit_member_hotel.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.os.Build
 import android.view.WindowManager
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import com.android.volley.AuthFailureError
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.ugd_3_kelompok.api.MemberHotelApi
-import com.example.ugd_3_kelompok.databinding.ActivityEditMemberHotelBinding
+import com.example.ugd_3_kelompok.api.PemesananKamarApi
 import com.example.ugd_3_kelompok.models.MemberHotelModel
+import com.example.ugd_3_kelompok.models.PemesananKamarModel
+import com.example.ugd_3_kelompok.room.MemberHotel
 import com.google.gson.Gson
 import org.json.JSONObject
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
 
-class EditMemberHotel : AppCompatActivity() {
+class EditPemesananKamar : AppCompatActivity() {
     private var etId: EditText? = null
-    private var etFasilitas: EditText? = null
-    private var etMembership: EditText? = null
+    private var etJenisKamar: EditText? = null
     private var edTanggal: EditText? = null
     private var edDurasi: EditText? = null
     private var layoutLoading: LinearLayout? = null
     private var queue: RequestQueue? = null
-    private val MEMBER_HOTEL_1 = "notif_member_hotel_1"
-    private val notificationId = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_member_hotel)
+        setContentView(R.layout.activity_edit_pemesanan_kamar)
 
         queue = Volley.newRequestQueue(this)
-        etId = findViewById(R.id.et_id)
-        etFasilitas = findViewById(R.id.et_fasilitas)
-        etMembership = findViewById(R.id.et_membership)
-        edTanggal = findViewById(R.id.et_tanggal)
-        edDurasi = findViewById(R.id.et_durasi)
+        etId = findViewById(R.id.pk_id)
+        etJenisKamar = findViewById(R.id.pk_jenisKamar)
+        edTanggal = findViewById(R.id.pk_tanggal)
+        edDurasi = findViewById(R.id.pk_durasi)
         layoutLoading = findViewById(R.id.layout_loading)
 
         val btnCancel = findViewById<Button>(R.id.btnCencel)
         btnCancel.setOnClickListener { finish() }
         val btnUpdate = findViewById<Button>(R.id.btnUpdate)
-        val tvTitle = findViewById<TextView>(R.id.txtEditMemberHotel)
+        val tvTitle = findViewById<TextView>(R.id.txtEditPemesananKamar)
         val id = intent.getIntExtra("id", -1)
         if (id == -1) {
             btnUpdate.setOnClickListener {
 
-                tvTitle.setText("Tambah Member Hotel")
+                tvTitle.setText("Tambah Pemesanan Kamar")
 
                 createMahasiswa()
             }
 
 
         } else {
-            tvTitle.setText("Edit Member Hotel")
+            tvTitle.setText("Edit Pemesanan Kamar")
             getMahasiswaById(id)
 
             btnUpdate.setOnClickListener { updateMahasiswa(id) }
@@ -96,12 +78,11 @@ class EditMemberHotel : AppCompatActivity() {
                     var memberJo = JSONObject(response.toString())
                     val member = memberJo.getJSONObject("data")
 
-                    etFasilitas!!.setText(member.getString("Fasilitas"))
-                    etMembership!!.setText(member.getString("membership"))
+                    etJenisKamar!!.setText(member.getString("jenisKamar"))
                     edTanggal!!.setText(member.getString("tanggal"))
                     edDurasi!!.setText(member.getString("durasi"))
 
-                    Toast.makeText(this@EditMemberHotel, "Data berhasil diambil", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@EditPemesananKamar, "Data berhasil diambil", Toast.LENGTH_SHORT)
                         .show()
                     setLoading(false)
                 },
@@ -112,12 +93,12 @@ class EditMemberHotel : AppCompatActivity() {
                             String(error.networkResponse.data, StandardCharsets.UTF_8)
                         val errors = JSONObject(responseBody)
                         Toast.makeText(
-                            this@EditMemberHotel,
+                            this@EditPemesananKamar,
                             errors.getString("message"),
                             Toast.LENGTH_SHORT
                         ).show()
                     } catch (e: Exception) {
-                        Toast.makeText(this@EditMemberHotel, e.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@EditPemesananKamar, e.message, Toast.LENGTH_SHORT).show()
                     }
                 }) {
                 @Throws(AuthFailureError::class)
@@ -133,39 +114,35 @@ class EditMemberHotel : AppCompatActivity() {
     private fun createMahasiswa() {
         setLoading(true)
 
-        if (etFasilitas!!.text.toString().isEmpty()) {
+        if (etJenisKamar!!.text.toString().isEmpty()) {
             Toast.makeText(
-                this@EditMemberHotel,
-                "Fasilitas tidak boleh kosong!",
+                this@EditPemesananKamar,
+                "Jenis Kamar tidak boleh kosong!",
                 Toast.LENGTH_SHORT
             ).show()
-        } else if (etMembership!!.text.toString().isEmpty()) {
-            Toast.makeText(this@EditMemberHotel, "Membership tidak boleh kosong!", Toast.LENGTH_SHORT)
-                .show()
         } else if (edTanggal!!.text.toString().isEmpty()) {
-            Toast.makeText(this@EditMemberHotel, "Tanggal tidak boleh kosong!", Toast.LENGTH_SHORT)
+            Toast.makeText(this@EditPemesananKamar, "Tanggal tidak boleh kosong!", Toast.LENGTH_SHORT)
                 .show()
         } else if (edDurasi!!.text.toString().isEmpty()) {
-            Toast.makeText(this@EditMemberHotel, "Durasi tidak boleh kosong!", Toast.LENGTH_SHORT)
+            Toast.makeText(this@EditPemesananKamar, "Durasi tidak boleh kosong!", Toast.LENGTH_SHORT)
                 .show()
         } else {
 
-            val member = MemberHotelModel(
+            val kamar = PemesananKamarModel(
                 0,
-                etFasilitas!!.text.toString(),
-                etMembership!!.text.toString(),
+                etJenisKamar!!.text.toString(),
                 edTanggal!!.text.toString(),
                 edDurasi!!.text.toString()
             )
             val stringRequest: StringRequest =
                 object :
-                    StringRequest(Method.POST, MemberHotelApi.ADD_URL, Response.Listener { response ->
+                    StringRequest(Method.POST, PemesananKamarApi.ADD_URL, Response.Listener { response ->
                         val gson = Gson()
                         val mahasiswa = gson.fromJson(response, MemberHotel::class.java)
 
                         if (mahasiswa != null)
                             Toast.makeText(
-                                this@EditMemberHotel,
+                                this@EditPemesananKamar,
                                 "Data Berhasil Ditambahkan",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -182,12 +159,12 @@ class EditMemberHotel : AppCompatActivity() {
                                 String(error.networkResponse.data, StandardCharsets.UTF_8)
                             val errors = JSONObject(responseBody)
                             Toast.makeText(
-                                this@EditMemberHotel,
+                                this@EditPemesananKamar,
                                 errors.getString("message"),
                                 Toast.LENGTH_SHORT
                             ).show()
                         } catch (e: Exception) {
-                            Toast.makeText(this@EditMemberHotel, e.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@EditPemesananKamar, e.message, Toast.LENGTH_SHORT).show()
                         }
                     }) {
                     @Throws(AuthFailureError::class)
@@ -201,7 +178,7 @@ class EditMemberHotel : AppCompatActivity() {
                     @Throws(AuthFailureError::class)
                     override fun getBody(): ByteArray {
                         val gson = Gson()
-                        val requestBody = gson.toJson(member)
+                        val requestBody = gson.toJson(kamar)
                         return requestBody.toByteArray(StandardCharsets.UTF_8)
                     }
 
@@ -218,10 +195,9 @@ class EditMemberHotel : AppCompatActivity() {
     private fun updateMahasiswa(id: Int) {
         setLoading(true)
 
-        val member = MemberHotelModel(
+        val member = PemesananKamarModel(
             id,
-            etFasilitas!!.text.toString(),
-            etMembership!!.text.toString(),
+            etJenisKamar!!.text.toString(),
             edTanggal!!.text.toString(),
             edDurasi!!.text.toString()
         )
@@ -229,15 +205,15 @@ class EditMemberHotel : AppCompatActivity() {
         val stringRequest: StringRequest = object :
             StringRequest(
                 Method.PUT,
-                MemberHotelApi.UPDATE_URL + id,
+                PemesananKamarApi.UPDATE_URL + id,
                 Response.Listener { response ->
                     val gson = Gson()
 
-                    val mahasiswa = gson.fromJson(response, MemberHotelModel::class.java)
+                    val mahasiswa = gson.fromJson(response, PemesananKamarModel::class.java)
 
                     if (mahasiswa != null)
                         Toast.makeText(
-                            this@EditMemberHotel,
+                            this@EditPemesananKamar,
                             "Data Berhasil Diupdate",
                             Toast.LENGTH_SHORT
                         ).show()
@@ -254,12 +230,12 @@ class EditMemberHotel : AppCompatActivity() {
                             String(error.networkResponse.data, StandardCharsets.UTF_8)
                         val errors = JSONObject(responseBody)
                         Toast.makeText(
-                            this@EditMemberHotel,
+                            this@EditPemesananKamar,
                             errors.getString("message"),
                             Toast.LENGTH_SHORT
                         ).show()
                     } catch (e: Exception) {
-                        Toast.makeText(this@EditMemberHotel, e.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@EditPemesananKamar, e.message, Toast.LENGTH_SHORT).show()
                     }
                 }) {
             @Throws(AuthFailureError::class)

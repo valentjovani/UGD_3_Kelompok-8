@@ -1,17 +1,14 @@
 package com.example.ugd_3_kelompok
 
-import android.content.DialogInterface
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -21,23 +18,17 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.ugd_3_kelompok.api.MemberHotelApi
+import com.example.ugd_3_kelompok.api.PemesananKamarApi
 import com.example.ugd_3_kelompok.models.MemberHotelModel
-import com.example.ugd_3_kelompok.room.Constant
-import com.example.ugd_3_kelompok.room.MemberHotel
-import com.example.ugd_3_kelompok.room.MemberHotelDB
+import com.example.ugd_3_kelompok.models.PemesananKamarModel
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_member_hotel.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
-class MemberHotelActivity : AppCompatActivity() {
-    private var srHotel: SwipeRefreshLayout? =null
-    private var adapter: MemberHotelAdapter? = null
-    private var svHotel: SearchView? =null
+class PemesananKamarActivity : AppCompatActivity() {
+    private var srKamar: SwipeRefreshLayout? =null
+    private var adapter: PemesananKamarAdapter? = null
+    private var svKamar: SearchView? =null
     private var layoutLoading: LinearLayout? =null
     private var queue: RequestQueue? = null
 
@@ -51,11 +42,11 @@ class MemberHotelActivity : AppCompatActivity() {
 
         queue =  Volley.newRequestQueue(this)
         layoutLoading = findViewById(R.id.layout_loading)
-        srHotel = findViewById(R.id.sr_hotel)
-        svHotel = findViewById(R.id.sv_hotel)
+        srKamar = findViewById(R.id.sr_kamar)
+        svKamar = findViewById(R.id.sv_kamar)
 
-        srHotel?.setOnRefreshListener (SwipeRefreshLayout.OnRefreshListener { allMemberHotel() })
-        svHotel?.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        srKamar?.setOnRefreshListener (SwipeRefreshLayout.OnRefreshListener { allMemberKamar() })
+        svKamar?.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(s: String?): Boolean {
                 return false
             }
@@ -69,47 +60,47 @@ class MemberHotelActivity : AppCompatActivity() {
 
         val fabAdd = findViewById<Button>(R.id.btnAdd)
         fabAdd.setOnClickListener{
-            val i = Intent(this@MemberHotelActivity, EditMemberHotel::class.java)
+            val i = Intent(this@PemesananKamarActivity, EditPemesananKamar::class.java)
             startActivityForResult(i, LAUNCH_ADD_ACTIVITY)
         }
 
         val rvProduk = findViewById<RecyclerView>(R.id.rv_hotel)
-        adapter = MemberHotelAdapter(ArrayList(), this)
+        adapter = PemesananKamarAdapter(ArrayList(), this)
         rvProduk.layoutManager = LinearLayoutManager(this)
         rvProduk.adapter = adapter
-        allMemberHotel()
+        allMemberKamar()
     }
 
-    private fun allMemberHotel(){
-        srHotel!!.isRefreshing = true
+    private fun allMemberKamar(){
+        srKamar!!.isRefreshing = true
         val stringRequest: StringRequest = object :
             StringRequest(Method.GET, MemberHotelApi.GET_ALL_URL, Response.Listener { response ->
                 val gson = Gson()
                 val jsonObject = JSONObject(response)
                 val jsonData = jsonObject.getJSONArray("data")
-                val memberHotelModel : Array<MemberHotelModel> = gson.fromJson(jsonData.toString(),Array<MemberHotelModel>::class.java)
+                val pemesananKamarModel : Array<PemesananKamarModel> = gson.fromJson(jsonData.toString(),Array<PemesananKamarModel>::class.java)
 
-                adapter!!.setMemberHotelList(memberHotelModel)
-                adapter!!.filter.filter(svHotel!!.query)
-                srHotel!!.isRefreshing = false
+                adapter!!.setPemesananKamarList(pemesananKamarModel)
+                adapter!!.filter.filter(svKamar!!.query)
+                srKamar!!.isRefreshing = false
 
-                if(!memberHotelModel.isEmpty())
-                    Toast.makeText(this@MemberHotelActivity, "Data Berhasil Diambil!", Toast.LENGTH_SHORT ).show()
+                if(!pemesananKamarModel.isEmpty())
+                    Toast.makeText(this@PemesananKamarActivity, "Data Berhasil Diambil!", Toast.LENGTH_SHORT ).show()
                 else
-                    Toast.makeText(this@MemberHotelActivity, "Data Kosong!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PemesananKamarActivity, "Data Kosong!", Toast.LENGTH_SHORT).show()
             }, Response.ErrorListener { error ->
-                srHotel!!.isRefreshing = false
+                srKamar!!.isRefreshing = false
                 try{
                     val responseBody =
                         String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
                     Toast.makeText(
-                        this@MemberHotelActivity,
+                        this@PemesananKamarActivity,
                         errors.getString("message"),
                         Toast.LENGTH_SHORT
                     ).show()
                 }catch (e: Exception){
-                    Toast.makeText(this@MemberHotelActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PemesananKamarActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             }){
             @Throws(AuthFailureError::class)
@@ -122,32 +113,31 @@ class MemberHotelActivity : AppCompatActivity() {
         queue!!.add(stringRequest)
     }
 
-    fun deleteMemberHotel(id: Int){
+    fun deletePemesanaKamar(id: Int){
         setLoading(true)
         val stringRequest: StringRequest = object :
-            StringRequest(Method.DELETE, MemberHotelApi.DELETE_URL + id, Response.Listener{ response ->
+            StringRequest(Method.DELETE, PemesananKamarApi.DELETE_URL + id, Response.Listener{ response ->
                 setLoading(false)
 
                 val gson = Gson()
-                var Hotel = gson.fromJson(response, MemberHotelModel::class.java)
-                if(Hotel != null)
-                    Toast.makeText(this@MemberHotelActivity, "Data Berhasil Dihapus",Toast.LENGTH_SHORT).show()
-                allMemberHotel()
+                var Kamar = gson.fromJson(response, PemesananKamarModel::class.java)
+                if(Kamar != null)
+                    Toast.makeText(this@PemesananKamarActivity, "Data Berhasil Dihapus", Toast.LENGTH_SHORT).show()
+                allMemberKamar()
             }, Response.ErrorListener{ error->
                 setLoading(false)
                 try{
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
                     Toast.makeText(
-                        this@MemberHotelActivity,
+                        this@PemesananKamarActivity,
                         errors.getString("message"),
                         Toast.LENGTH_SHORT
                     ).show()
                 }catch (e:Exception){
-                    Toast.makeText(this@MemberHotelActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PemesananKamarActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             }){
-            // Menambahkan header pada request
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val headers = java.util.HashMap<String, String>()
@@ -162,7 +152,7 @@ class MemberHotelActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(resultCode, resultCode, data)
-        if(requestCode == LAUNCH_ADD_ACTIVITY && resultCode == RESULT_OK) allMemberHotel()
+        if(requestCode == LAUNCH_ADD_ACTIVITY && resultCode == RESULT_OK) allMemberKamar()
     }
 
     private fun setLoading(isLoading: Boolean){

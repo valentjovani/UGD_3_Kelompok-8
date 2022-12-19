@@ -11,6 +11,11 @@
         android:title="Data Pelanggan"/>
 
     <item
+        android:id="@+id/navigation_PemesananKamar"
+        android:icon="@drawable/ic_baseline_hotel_24"
+        android:title="Pemesanan Kamar"/>
+
+    <item
         android:id="@+id/navigation_memberHotel"
         android:icon="@drawable/ic_baseline_work_24"
         android:title="Member Hotel"/>

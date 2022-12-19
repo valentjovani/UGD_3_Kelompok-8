@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditMemberHotel">
+    tools:context=".EditPemesananKamar">
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -21,39 +21,24 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtEditMemberHotel"
+                android:id="@+id/txtEditPemesananKamar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="Member Hotel"
+                android:text="PEMESANAN KAMAR"
                 android:textColor="@color/black"
                 android:textSize="32sp"
                 android:textStyle="bold"/>
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_id"
+                android:id="@+id/pk_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_fasilitas"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:hint="Fasilitas">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_fasilitas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords"/>
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_membership"
+                android:id="@+id/layout_jenisKamar"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +47,7 @@
                 android:hint="Membership">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_membership"
+                    android:id="@+id/pk_jenisKamar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"/>
@@ -78,7 +63,7 @@
                 android:hint="Tanggal">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_tanggal"
+                    android:id="@+id/pk_tanggal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"/>
@@ -94,7 +79,7 @@
                 android:hint="Durasi">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_durasi"
+                    android:id="@+id/pk_durasi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"/>

@@ -12,6 +12,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.ugd_3_kelompok.api.UserApi
 import com.example.ugd_3_kelompok.databinding.FragmentProfilBinding
 import com.example.ugd_3_kelompok.room.UserDB
 import org.json.JSONObject
@@ -35,7 +36,11 @@ class ProfilFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setProfil()
+
+        queue = Volley.newRequestQueue(activity)
+        val sharedPreferences = (activity as HomeActivity).getSharedPreferences()
+        var id = sharedPreferences.getInt("id", 0)
+        showUser(id)
 
         binding.btnUpdate.setOnClickListener {
             transitionFragment(EditProfileFragment())
@@ -73,6 +78,44 @@ class ProfilFragment : Fragment() {
         transition.replace(R.id.fragment_profil, fragment)
             .addToBackStack(null).commit()
         transition.hide(ProfilFragment())
+    }
+
+    private fun showUser(id: Int) {
+
+        val stringRequest: StringRequest = object :
+            StringRequest(Method.GET, UserApi.GET_BY_ID_URL + id, Response.Listener { response ->
+
+                var userObject = JSONObject(response.toString())
+                val userData = userObject.getJSONObject("data")
+
+                binding.viewUsername.setText(userData.getString("username"))
+                binding.viewEmail.setText(userData.getString("email"))
+                binding.viewNomorTelepon.setText(userData.getString("nomorTelepon"))
+
+                Toast.makeText(activity, "Data User berhasil diambil!", Toast.LENGTH_SHORT).show()
+
+            }, Response.ErrorListener { error ->
+
+                try {
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toast.makeText(
+                        activity,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }catch (e: Exception) {
+                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Accept"] = "application/json"
+                return headers
+            }
+        }
+        queue!!.add(stringRequest)
     }
 
 

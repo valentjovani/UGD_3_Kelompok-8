@@ -1,6 +1,5 @@
 package com.example.ugd_3_kelompok
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -12,21 +11,19 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ugd_3_kelompok.models.MemberHotelModel
-import com.example.ugd_3_kelompok.room.MemberHotel
+import com.example.ugd_3_kelompok.models.PemesananKamarModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_member_hotel_adapter.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MemberHotelAdapter (private var memberHotelList : List<MemberHotelModel>, context: Context
+class PemesananKamarAdapter (private var pemesananKamarList : List<PemesananKamarModel>, context: Context
 ) :
-    RecyclerView.Adapter<MemberHotelAdapter.ViewHolder>(), Filterable {
-    private var filteredMemberList: MutableList<MemberHotelModel>
+    RecyclerView.Adapter<PemesananKamarAdapter.ViewHolder>(), Filterable {
+    private var filteredKamarList: MutableList<PemesananKamarModel>
     private val context: Context
 
     init{
-        filteredMemberList = ArrayList(memberHotelList)
+        filteredKamarList = ArrayList(pemesananKamarList)
         this.context=context
     }
 
@@ -38,40 +35,39 @@ class MemberHotelAdapter (private var memberHotelList : List<MemberHotelModel>, 
     }
 
     override fun getItemCount(): Int {
-        return filteredMemberList.size
+        return filteredKamarList.size
     }
 
-    fun setMemberHotelList(memberHotelList: Array<MemberHotelModel>){
-        this.memberHotelList = memberHotelList.toList()
-        filteredMemberList = memberHotelList.toMutableList()
+    fun setPemesananKamarList(pemesananKamarList: Array<PemesananKamarModel>){
+        this.pemesananKamarList = pemesananKamarList.toList()
+        filteredKamarList = pemesananKamarList.toMutableList()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int){
-        val member = filteredMemberList[position]
-        holder.tvFasilitas.text = member.fasilitas
-        holder.tvMembership.text = member.membership
-        holder.tvTanggal.text = member.tanggal
-        holder.tvDurasi.text = member.durasi
+        val kamar = filteredKamarList[position]
+        holder.tvJenisKamar.text = kamar.jenisKamar
+        holder.tvTanggal.text = kamar.tanggal
+        holder.tvDurasi.text = kamar.durasi
 
         holder.btnDelete.setOnClickListener{
             val materialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
             materialAlertDialogBuilder.setTitle("Konfirmasi")
-                .setMessage("Apakah anda yakin ingin menghapus data Member Hotel ini?")
+                .setMessage("Apakah anda yakin ingin menghapus data Pemesanan kamar ini?")
                 .setNegativeButton("Batal", null)
                 .setPositiveButton("Hapus"){_, _ ->
-                    if(context is MemberHotelActivity){
-                        context.deleteMemberHotel(
-                            member.id
+                    if(context is PemesananKamarActivity){
+                        context.deletePemesanaKamar(
+                            kamar.id
                         )
                     }
                 }
                 .show()
         }
         holder.cvMahasiswa.setOnClickListener{
-            val i = Intent(context, EditMemberHotel::class.java)
-            i.putExtra("id",member.id)
-            if(context is MemberHotelActivity)
-                context.startActivityForResult(i, MemberHotelActivity.LAUNCH_ADD_ACTIVITY)
+            val i = Intent(context, EditPemesananKamar::class.java)
+            i.putExtra("id",kamar.id)
+            if(context is PemesananKamarActivity)
+                context.startActivityForResult(i, PemesananKamarActivity.LAUNCH_ADD_ACTIVITY)
 
         }
     }
@@ -80,14 +76,14 @@ class MemberHotelAdapter (private var memberHotelList : List<MemberHotelModel>, 
         return object : Filter(){
             override fun performFiltering(charSequence: CharSequence): FilterResults {
                 val charSequenceString = charSequence.toString()
-                val filtered : MutableList<MemberHotelModel> = java.util.ArrayList()
+                val filtered : MutableList<PemesananKamarModel> = java.util.ArrayList()
                 if(charSequenceString.isEmpty()){
-                    filtered.addAll(memberHotelList)
+                    filtered.addAll(pemesananKamarList)
                 }else{
-                    for(member in memberHotelList){
-                        if(member.fasilitas.lowercase(Locale.getDefault())
+                    for(kamar in pemesananKamarList){
+                        if(kamar.jenisKamar.lowercase(Locale.getDefault())
                                 .contains(charSequenceString.lowercase(Locale.getDefault()))
-                        ) filtered.add(member)
+                        ) filtered.add(kamar)
 
                     }
                 }
@@ -97,24 +93,22 @@ class MemberHotelAdapter (private var memberHotelList : List<MemberHotelModel>, 
             }
 
             override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
-                filteredMemberList.clear()
-                filteredMemberList.addAll((filterResults.values as List<MemberHotelModel>))
+                filteredKamarList.clear()
+                filteredKamarList.addAll((filterResults.values as List<PemesananKamarModel>))
                 notifyDataSetChanged()
             }
         }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var tvFasilitas: TextView
-        var tvMembership: TextView
+        var tvJenisKamar: TextView
         var tvTanggal: TextView
         var tvDurasi: TextView
         var btnDelete: ImageButton
         var cvMahasiswa: CardView
 
         init{
-            tvFasilitas = itemView.findViewById(R.id.tvFasilitas)
-            tvMembership = itemView.findViewById(R.id.tvMembership)
+            tvJenisKamar = itemView.findViewById(R.id.tvJenisKamar)
             tvTanggal = itemView.findViewById(R.id.tvTanggal)
             tvDurasi = itemView.findViewById(R.id.tvDurasi)
             btnDelete = itemView.findViewById(R.id.btn_delete)
